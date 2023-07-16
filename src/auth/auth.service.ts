@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
@@ -95,8 +95,19 @@ export class AuthService {
     return true;
   }
 
-  async refreshTokens() {
-    const tokens = '';
-    return tokens;
+  async refreshTokens(userId: number, rt: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user && argon.verify(user.refreshHash, rt)) {
+      const tokens = await this.signToken(user.id, user.email);
+      await this.updateRefreshToken(user.id, tokens.refresh_token);
+      return tokens;
+    } else {
+      throw new ForbiddenException('Access Denied');
+    }
   }
 }
