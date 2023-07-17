@@ -10,16 +10,19 @@ import {
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { JwtRefreshGuard } from './guard';
+import { Public } from 'src/decorator/';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('signin')
   signin(@Body() dto: AuthDto) {
     return this.authService.signin(dto);
   }
 
+  @Public()
   @Post('signup')
   signup(@Body() dto: AuthDto) {
     return this.authService.signup(dto);
