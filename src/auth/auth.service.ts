@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
@@ -21,7 +25,7 @@ export class AuthService {
     const secret = this.config.get('JWT_SECRET');
     const refresh = this.config.get('JWT_REFRESH');
     const access_token = await this.jwt.signAsync(payload, {
-      expiresIn: '1m',
+      expiresIn: '5m',
       secret,
     });
     const refresh_token = await this.jwt.signAsync(payload, {
@@ -82,9 +86,9 @@ export class AuthService {
       const tokens = await this.signToken(user.id, user.email);
       await this.updateRefreshToken(user.id, tokens.refresh_token);
       return tokens;
+    } else {
+      throw new UnauthorizedException('Unauthorized');
     }
-
-    return null;
   }
 
   async signout(userId: number) {

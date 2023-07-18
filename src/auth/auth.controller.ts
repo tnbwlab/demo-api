@@ -28,11 +28,6 @@ export class AuthController {
     return this.authService.signup(dto);
   }
 
-  @Post('me')
-  getMe() {
-    return 'my info';
-  }
-
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
   refreshToken(@Headers('Authorization') header: string, @Req() req: any) {
