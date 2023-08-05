@@ -20,6 +20,26 @@ model User {
   @@map("users")
 }
 
+model Room {
+  id  Int @id @default(autoincrement())
+  room  String
+  type  String? //air, fan
+  detail  String?
+  status  String  //active, inactive
+  createdAt DateTime @default(now())
+  @@map("rooms")
+}
+
+model Renter {
+  id  Int  @id @default(autoincrement())
+  name  String
+  phone String?
+  status  String  //active, inactive
+  dtmovein  DateTime?
+  dtmoveout DateTime?
+  @@map("renters")
+}
+
 model Bookmark {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
