@@ -8,7 +8,7 @@ import {
   Headers,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
+import { AuthDto, SignupDto } from './dto';
 import { JwtRefreshGuard } from './guard';
 import { Public } from 'src/decorator/';
 
@@ -24,7 +24,7 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  signup(@Body() dto: AuthDto) {
+  signup(@Body() dto: SignupDto) {
     return this.authService.signup(dto);
   }
 
